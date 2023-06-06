@@ -6,7 +6,7 @@ import { BiUser } from "react-icons/bi";
 import { FaAngleDown } from "react-icons/fa";
 
 const DeskTopMenu = ({ menuOptions, logo }) => {
-  const user = false;
+  const user = true;
   return (
     <nav className="py-2 bg-white shadow-lg dark:bg-gray-800">
       <Container>
@@ -26,12 +26,25 @@ const DeskTopMenu = ({ menuOptions, logo }) => {
               <div>
                 <ThemeSwitcher />
               </div>
-              <div className="flex items-center gap-3">
-                <div className="relative p-2 border-2 rounded-full border-primary">
-                  <BiUser className="text-2xl text-primary" />
+              {user ? (
+                <div>
+                  <ul className="flex justify-center flex-grow gap-6">
+                    <li className="font-semibold">
+                      <ActiveLink to={"/login"}>Login</ActiveLink>
+                    </li>
+                    <li className="font-semibold">
+                      <ActiveLink to={"/signup"}>Signup</ActiveLink>
+                    </li>
+                  </ul>
                 </div>
-                <FaAngleDown className="text-xl text-primary" />
-              </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <div className="relative p-2 border-2 rounded-full border-primary">
+                    <BiUser className="text-2xl text-primary" />
+                  </div>
+                  <FaAngleDown className="text-xl text-primary" />
+                </div>
+              )}
             </div>
           </div>
         </div>
