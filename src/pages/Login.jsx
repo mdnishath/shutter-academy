@@ -10,10 +10,13 @@ import Container from "../components/shared/Container";
 import { toast } from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
 import { BeatLoader } from "react-spinners";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { API } from "../hooks/useAxios";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [axiosSecure] = useAxiosSecure();
   const from = location.state?.from?.pathname || "/";
   const [showPaword, setShowPassword] = useState(false);
   const { signIn, loading, setLoading } = useAuth();
@@ -26,10 +29,19 @@ const Login = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await signIn(data.email, data.password);
-
-      toast.success("You are loged in");
-      navigate(from, { replace: true });
+      const { user } = await signIn(data.email, data.password);
+      setLoading(true);
+      const apiResult = await API.post("/users", {
+        email: user.email,
+        name: user.displayName,
+        photo: user.photoURL,
+        role: "student",
+      });
+      if (apiResult.status == 200) {
+        setLoading(false);
+        toast.success("Login Success");
+        navigate(from, { replace: true });
+      }
     } catch (error) {
       toast.error(error.message);
       console.log(error);
@@ -66,7 +78,7 @@ const Login = () => {
                       },
                     })}
                     placeholder="Email "
-                    className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-textLight"
+                    className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none !text-textDark dark:text-textLight"
                   />
                   <div className="bg-primary absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
                     <MdOutlineEmail className="text-xl text-gray-900" />
@@ -90,7 +102,7 @@ const Login = () => {
                       },
                     })}
                     placeholder="Password"
-                    className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-white"
+                    className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-white"
                   />
 
                   <div className="bg-primary  absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">

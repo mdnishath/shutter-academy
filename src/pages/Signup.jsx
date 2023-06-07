@@ -4,18 +4,19 @@ import loginImage from "../assets/login.svg";
 import Title from "../components/shared/Title";
 import { MdOutlineEmail, MdOutlinePassword } from "react-icons/md";
 import { AiFillEye, AiFillEyeInvisible, AiOutlineUser } from "react-icons/ai";
-import { IoMdImages } from "react-icons/io";
 import SocialLogin from "../components/SocialLogin ";
 import Container from "../components/shared/Container";
 import useAuth from "../hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
+import { API } from "../hooks/useAxios";
 
 const Signup = () => {
   const [showPaword, setShowPassword] = useState();
-  const [passwordMatch, setPasswordMatch] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const { createUser, loading, setLoading, uploadImage, updateUser } =
     useAuth();
 
@@ -34,14 +35,20 @@ const Signup = () => {
       const file = data.image[0];
       const uploadURL = await uploadImage(file);
       if (uploadURL) {
-        console.log(uploadURL);
-        const result = await createUser(data.email, data.password);
-        if (result.user) {
-          await updateUser(data.name, uploadURL);
+        await createUser(data.email, data.password);
+        await updateUser(data.name, uploadURL);
+        setLoading(true);
+        const apiResult = await API.post("/users", {
+          email: data.email,
+          name: data.name,
+          photo: uploadURL,
+          role: "student",
+        });
+        console.log(apiResult);
+        if (apiResult.status == 200 || 201) {
           setLoading(false);
-          reset();
-          toast.success("Your Account has been created");
-          navigate("/");
+          toast.success("Registration Success");
+          navigate(from, { replace: true });
         }
       }
     } catch (error) {
@@ -212,7 +219,7 @@ const Signup = () => {
                   ) : (
                     <button
                       type="submit"
-                      className="w-full px-10 py-2 text-lg font-semibold rounded-md bg-primary"
+                      className="w-full px-10 py-2 text-lg font-semibold rounded-md bg-primary text-textDark"
                     >
                       Sign Up
                     </button>
