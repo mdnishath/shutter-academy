@@ -4,12 +4,19 @@ import loginImage from "../assets/login.svg";
 import Title from "../components/shared/Title";
 import { MdOutlineEmail, MdOutlinePassword } from "react-icons/md";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SocialLogin from "../components/SocialLogin ";
 import Container from "../components/shared/Container";
+import { toast } from "react-hot-toast";
+import useAuth from "../hooks/useAuth";
+import { BeatLoader } from "react-spinners";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const [showPaword, setShowPassword] = useState(false);
+  const { signIn, loading, setLoading } = useAuth();
   const {
     register,
     handleSubmit,
@@ -17,16 +24,17 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
-    console.log(data);
-    // try {
-    //   await signIn(data.email, data.password);
+    setLoading(true);
+    try {
+      await signIn(data.email, data.password);
 
-    //   toast.success("You are loged in");
-    //   navigate(from, { replace: true });
-    // } catch (error) {
-    //   toast.error(error.message);
-    //   console.log(error);
-    // }
+      toast.success("You are loged in");
+      navigate(from, { replace: true });
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+      setLoading(false);
+    }
   };
   return (
     <div className="md:py-[200px] py-5">
@@ -113,9 +121,18 @@ const Login = () => {
                 </div>
 
                 <div className="relative flex flex-col justify-end overflow-hidden">
-                  <button className="w-full px-10 py-2 text-lg font-semibold text-gray-900 rounded-md bg-primary">
-                    Login
-                  </button>
+                  {loading ? (
+                    <button className="w-full px-10 py-2 text-lg font-semibold rounded-md bg-primary text-textDark">
+                      <BeatLoader className="text-surfece" />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="w-full px-10 py-2 text-lg font-semibold rounded-md bg-primary text-textDark"
+                    >
+                      Login
+                    </button>
+                  )}
                   <p className="mt-5 text-center text-white">
                     Don't have an account?
                     <Link to={"/signup"} className="ml-1">

@@ -1,12 +1,20 @@
+import useAuth from "../hooks/useAuth";
 import ActiveLink from "./ActiveLink";
 import ThemeSwitcher from "./ThemeSwitcher";
 import Container from "./shared/Container";
 import Image from "./shared/Image";
 import { BiUser } from "react-icons/bi";
 import { FaAngleDown } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const DeskTopMenu = ({ menuOptions, logo }) => {
-  const user = true;
+  const navigate = useNavigate();
+  const { user, logOut } = useAuth();
+
+  const handleLogout = async () => {
+    await logOut();
+    navigate("/login");
+  };
   return (
     <nav className="py-2 bg-white shadow-lg dark:bg-gray-800">
       <Container>
@@ -26,7 +34,7 @@ const DeskTopMenu = ({ menuOptions, logo }) => {
               <div>
                 <ThemeSwitcher />
               </div>
-              {user ? (
+              {!user ? (
                 <div>
                   <ul className="flex justify-center flex-grow gap-6">
                     <li className="font-semibold">
@@ -43,6 +51,12 @@ const DeskTopMenu = ({ menuOptions, logo }) => {
                     <BiUser className="text-2xl text-primary" />
                   </div>
                   <FaAngleDown className="text-xl text-primary" />
+                  <button
+                    onClick={handleLogout}
+                    className="px-6 py-2 font-semibold text-gray-900 rounded-full bg-primary"
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>

@@ -5,37 +5,51 @@ import Title from "../components/shared/Title";
 import { MdOutlineEmail, MdOutlinePassword } from "react-icons/md";
 import { AiFillEye, AiFillEyeInvisible, AiOutlineUser } from "react-icons/ai";
 import { IoMdImages } from "react-icons/io";
-import { Link } from "react-router-dom";
 import SocialLogin from "../components/SocialLogin ";
 import Container from "../components/shared/Container";
+import useAuth from "../hooks/useAuth";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 const Signup = () => {
   const [showPaword, setShowPassword] = useState();
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const navigate = useNavigate();
+  const { createUser, loading, setLoading, uploadImage, updateUser } =
+    useAuth();
 
   const {
     register,
     handleSubmit,
     watch,
-    Controller,
+    reset,
     formState: { errors },
   } = useForm();
   const password = watch("password", "");
 
   const onSubmit = async (data) => {
-    console.log(data);
-    // try {
-    //   await signIn(data.email, data.password);
-
-    //   toast.success("You are loged in");
-    //   navigate(from, { replace: true });
-    // } catch (error) {
-    //   toast.error(error.message);
-    //   console.log(error);
-    // }
+    setLoading(true);
+    try {
+      const file = data.image[0];
+      const uploadURL = await uploadImage(file);
+      if (uploadURL) {
+        console.log(uploadURL);
+        const result = await createUser(data.email, data.password);
+        if (result.user) {
+          await updateUser(data.name, uploadURL);
+          setLoading(false);
+          reset();
+          toast.success("Your Account has been created");
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
-    <div className="md:py-[200px] py-5">
+    <div className="md:py-[100px] py-5">
       <Container>
         <div className="relative w-full px-5 overflow-hidden border-2 rounded-md shadow-lg border-gray-2 dark:border-gray-800 bg-overlay md:py-10 border-overlay-light">
           <div className="grid py-5 md:grid-cols-2 md:py-0 md:p-5">
@@ -191,9 +205,18 @@ const Signup = () => {
                 </div>
 
                 <div className="relative flex flex-col justify-end overflow-hidden">
-                  <button className="w-full px-10 py-2 text-lg font-semibold text-gray-900 rounded-md bg-primary">
-                    Login
-                  </button>
+                  {loading ? (
+                    <button className="w-full px-10 py-2 text-lg font-semibold rounded-md bg-primary">
+                      <BeatLoader className="text-surfece" />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="w-full px-10 py-2 text-lg font-semibold rounded-md bg-primary"
+                    >
+                      Sign Up
+                    </button>
+                  )}
                   <p className="mt-5 text-center text-white">
                     Already have an account?
                     <Link to={"/login"} className="ml-1">
