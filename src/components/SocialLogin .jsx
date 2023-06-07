@@ -1,5 +1,5 @@
 import React from "react";
-import { BsFacebook, BsGithub, BsGoogle } from "react-icons/bs";
+import { BsGoogle } from "react-icons/bs";
 
 const SocialLogin = () => {
   const handleGoogleLogin = () => {};
@@ -7,7 +7,7 @@ const SocialLogin = () => {
     <div className="flex justify-center gap-5">
       <div
         onClick={handleGoogleLogin}
-        className="flex items-center justify-center w-full gap-4 py-2 text-lg font-semibold text-gray-900 rounded-lg cursor-pointer dark:bg-primary"
+        className="flex items-center justify-center w-full gap-4 py-2 text-lg font-semibold text-gray-900 rounded-lg cursor-pointer bg-primary"
       >
         <BsGoogle />
         <p>Login With Google</p>
