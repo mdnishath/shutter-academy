@@ -12,6 +12,7 @@ import useAuth from "../hooks/useAuth";
 import { BeatLoader } from "react-spinners";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { API } from "../hooks/useAxios";
+import useToken from "../hooks/useTocken";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Login = () => {
         role: "student",
       });
       if (apiResult.status == 200) {
+        await useToken(user);
         setLoading(false);
         toast.success("Login Success");
         navigate(from, { replace: true });

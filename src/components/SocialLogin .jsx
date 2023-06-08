@@ -3,6 +3,7 @@ import { BsGoogle } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-hot-toast";
 import GlobalLoader from "./loaders/GlobalLoader";
+import useToken from "../hooks/useTocken";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { API } from "../hooks/useAxios";
@@ -23,6 +24,7 @@ const SocialLogin = () => {
         role: "student",
       });
       if (apiResult.status == 200) {
+        await useToken(user);
         setLoading(false);
         toast.success("Login Success");
         navigate(from, { replace: true });

@@ -11,6 +11,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
 import { API } from "../hooks/useAxios";
+import useToken from "../hooks/useTocken";
 
 const Signup = () => {
   const [showPaword, setShowPassword] = useState();
@@ -35,7 +36,7 @@ const Signup = () => {
       const file = data.image[0];
       const uploadURL = await uploadImage(file);
       if (uploadURL) {
-        await createUser(data.email, data.password);
+        const { user } = await createUser(data.email, data.password);
         await updateUser(data.name, uploadURL);
         setLoading(true);
         const apiResult = await API.post("/users", {
@@ -46,6 +47,7 @@ const Signup = () => {
         });
         console.log(apiResult);
         if (apiResult.status == 200 || 201) {
+          await useToken(user);
           setLoading(false);
           toast.success("Registration Success");
           navigate(from, { replace: true });
