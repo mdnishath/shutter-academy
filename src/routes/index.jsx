@@ -8,6 +8,12 @@ import Signup from "../pages/Signup";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/Dashboard";
 import PrivateRoute from "./PrivateRoute";
+import ManageUsers from "../pages/Dashboard/admin/ManageUsers";
+import ManageClassess from "../pages/Dashboard/admin/ManageClassess";
+import Profile from "../pages/Dashboard/Profile";
+import AdminRoute from "./AdminRoute";
+import AddClass from "../pages/Dashboard/instructor/AddClass";
+import InstructorRoute from "./InstructorRoute";
 
 //Creating routs array
 export const router = createBrowserRouter([
@@ -29,6 +35,26 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </PrivateRoute>
     ),
-    children: [{ path: "/dashboard", element: <Dashboard /> }],
+    children: [
+      { path: "/dashboard", element: <Dashboard /> },
+      {
+        path: "/dashboard/users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      { path: "/dashboard/profile", element: <Profile /> },
+      { path: "/dashboard/classes", element: <ManageClassess /> },
+      {
+        path: "/dashboard/add-class",
+        element: (
+          <InstructorRoute>
+            <AddClass></AddClass>
+          </InstructorRoute>
+        ),
+      },
+    ],
   },
 ]);

@@ -5,10 +5,11 @@ import ThemeSwitcher from "../ThemeSwitcher";
 import ActiveLink from "../ActiveLink";
 import { BiUser } from "react-icons/bi";
 import { FaAngleDown } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Topbar = () => {
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
+  const navigate = useNavigate();
   const handleLogout = async () => {
     await logOut();
     navigate("/login");

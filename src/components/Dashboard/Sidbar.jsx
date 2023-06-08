@@ -7,9 +7,11 @@ import { FiSettings } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { AiOutlineHome } from "react-icons/ai";
 import Item from "./shared/Item";
+import useAdmin from "../../hooks/useAdmin";
+import GlobalLoader from "../loaders/GlobalLoader";
 
 const Sidebar = () => {
-  const role = "admin";
+  const [role, isroleLoading] = useAdmin();
 
   const adminPages = [
     { path: "/dashboard", name: "Dashboard", icon: RxDashboard },
@@ -25,7 +27,7 @@ const Sidebar = () => {
   const instructorPages = [
     { path: "/dashboard", name: "Dashboard", icon: RxDashboard },
     {
-      path: "//dashboard/add-class",
+      path: "/dashboard/add-class",
       name: "Add a Class",
       icon: MdOutlineClass,
     },
@@ -53,6 +55,9 @@ const Sidebar = () => {
     { path: "/dashboard/profile", name: "Profile", icon: FiSettings },
     { path: "/", name: "Back To Home", icon: AiOutlineHome },
   ];
+  if (isroleLoading) {
+    return <GlobalLoader />;
+  }
 
   return (
     <div className="dark:bg-gray-800 bg-white shadow-xl w-[250px] p-4">
@@ -66,7 +71,7 @@ const Sidebar = () => {
           ))}
         </ul>
       )}
-      {role === "instractor" && (
+      {role === "instructor" && (
         <ul className="flex flex-col gap-5 mt-10">
           {instructorPages.map((item, index) => (
             <Item key={index} item={item} />

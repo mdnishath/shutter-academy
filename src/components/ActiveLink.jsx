@@ -1,12 +1,17 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const ActiveLink = ({ to, children }) => {
+  const { pathname } = useLocation();
+
+  const isActive = pathname === to;
+
+  const combinedClassName = isActive
+    ? "text-primary text-lg active"
+    : "text-lg";
+
   return (
-    <NavLink
-      to={to}
-      className={({ isActive }) => `${isActive && "text-primary"} text-lg`}
-    >
+    <NavLink to={to} className={combinedClassName}>
       {children}
     </NavLink>
   );
