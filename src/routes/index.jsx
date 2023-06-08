@@ -5,6 +5,9 @@ import Instructors from "../pages/Instructors";
 import Classes from "../pages/Classes";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import DashboardLayout from "../layouts/DashboardLayout";
+import Dashboard from "../pages/Dashboard";
+import PrivateRoute from "./PrivateRoute";
 
 //Creating routs array
 export const router = createBrowserRouter([
@@ -19,13 +22,13 @@ export const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
     ],
   },
-  //   {
-  //     path: "/",
-  //     element: <RootLayout />,
-  //     children: [
-  //       { path: "/", element: <Home /> },
-  //       { path: "/instructors", element: <Instructors /> },
-  //       { path: "/classes", element: <Classes /> },
-  //     ],
-  //   },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [{ path: "/dashboard", element: <Dashboard /> }],
+  },
 ]);
