@@ -1,6 +1,7 @@
-import React from "react";
-import Title from "../../../components/shared/Title";
+import React, { useEffect } from "react";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useForm } from "react-hook-form";
+import useAuth from "../../../hooks/useAuth";
 import { BsJournalBookmark } from "react-icons/bs";
 import {
   AiOutlineDollarCircle,
@@ -8,12 +9,11 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
-import useAuth from "../../../hooks/useAuth";
-import { Link } from "react-router-dom";
-import { toast } from "react-hot-toast";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import GlobalLoader from "../../loaders/GlobalLoader";
 
-const AddClass = () => {
+const UpdateModal = ({ item, handleClose }) => {
+  console.log(item._id);
   const { loading, user, uploadImage } = useAuth();
   const [axiosSecure] = useAxiosSecure();
   const {
@@ -22,35 +22,53 @@ const AddClass = () => {
     reset,
     formState: { errors },
   } = useForm();
+  const {
+    data: apiClass = {},
+    isLoading,
+    refetch,
+  } = useQuery(["users"], async () => {
+    const res = await axiosSecure.get(`/instructor/class/${item._id}`);
+    return res.data;
+  });
+
   const onSubmit = async (data) => {
-    try {
-      const file = data.image[0];
-      const imageURL = await uploadImage(file);
-      if (imageURL) {
-        const result = await axiosSecure.post("/instructor", {
-          title: data.title,
-          instructor: data.instructor,
-          price: data.price,
-          seats: data.seats,
-          email: data.email,
-          image: imageURL,
-          stutas: "pending",
-          enrolled: 0,
-        });
-        if (result.data.insertedId) {
-          toast.success("Class added successfully");
-          reset();
-        }
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
+    // try {
+    //   const file = data.image[0];
+    //   const imageURL = await uploadImage(file);
+    //   if (imageURL) {
+    //     const result = await axiosSecure.post("/instructor", {
+    //       title: data.title,
+    //       instructor: data.instructor,
+    //       price: data.price,
+    //       seats: data.seats,
+    //       email: data.email,
+    //       image: imageURL,
+    //       stutas: "pending",
+    //       enrolled: 0,
+    //     });
+    //     if (result.data.insertedId) {
+    //       toast.success("Class added successfully");
+    //       reset();
+    //     }
+    //   }
+    // } catch (error) {
+    //   toast.error(error.message);
+    // }
   };
+  if (isLoading || isLoading) {
+    return <GlobalLoader />;
+  }
   return (
-    <div className="w-8/12 px-5 py-10 my-[150px] mx-auto bg-white rounded-lg shadow-xl dark:bg-gray-800">
-      <div className="text-center">
-        <Title text={"Add A Class"} />
-        <div>
+    <div className="absolute top-0 left-0 z-40 flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-60">
+      <div className="bg-gray-800 w-[960px] py-10 px-5 rounded-lg relative">
+        <button
+          onClick={handleClose}
+          htmlFor="my-modal-3"
+          className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
+        >
+          ✕
+        </button>
+        <div className="">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col justify-center h-full gap-4 md:p-5"
@@ -65,6 +83,7 @@ const AddClass = () => {
                     })}
                     placeholder="Class Title "
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-textLight"
+                    defaultValue={apiClass?.title}
                   />
                   <div className="bg-primary absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
                     <BsJournalBookmark className="text-xl text-gray-900" />
@@ -85,7 +104,7 @@ const AddClass = () => {
                     })}
                     placeholder="Instructor name"
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-white"
-                    value={user?.displayName}
+                    defaultValue={user?.displayName}
                     readOnly
                   />
 
@@ -110,7 +129,7 @@ const AddClass = () => {
                     })}
                     placeholder="Instructor email"
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-white"
-                    value={user?.email}
+                    defaultValue={user?.email}
                     readOnly
                   />
 
@@ -136,6 +155,7 @@ const AddClass = () => {
                     placeholder="Available seats"
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-white"
                     min={1}
+                    defaultValue={apiClass?.seats}
                   />
 
                   <div className="bg-primary  absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
@@ -158,6 +178,7 @@ const AddClass = () => {
                     placeholder="Price"
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-white"
                     min={1}
+                    defaultValue={apiClass?.price}
                   />
 
                   <div className="bg-primary  absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
@@ -200,7 +221,7 @@ const AddClass = () => {
                   type="submit"
                   className="w-full px-10 py-2 text-lg font-semibold rounded-md bg-primary text-textDark"
                 >
-                  Add Class
+                  Update Class
                 </button>
               )}
             </div>
@@ -211,4 +232,4 @@ const AddClass = () => {
   );
 };
 
-export default AddClass;
+export default UpdateModal;

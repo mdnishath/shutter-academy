@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "../../../components/shared/Table";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import GlobalLoader from "../../../components/loaders/GlobalLoader";
 import Image from "../../../components/shared/Image";
+import UpdateModal from "../../../components/Dashboard/instructor/UpdateModal";
 
 const MyClasses = () => {
   const [axiosSecure] = useAxiosSecure();
+  const [show, setShow] = useState(false);
+  const [item, setItem] = useState();
   const labels = [
     "Title",
     "Enrolled Students",
@@ -22,12 +25,19 @@ const MyClasses = () => {
     const res = await axiosSecure.get("/instructor");
     return res.data;
   });
-  console.log(classes);
+
+  //handle Modal
+  const handleModal = (item) => {
+    setItem(item);
+    setShow(!show);
+  };
+  const handleClose = () => setShow(!show);
   if (isLoading) {
     return <GlobalLoader />;
   }
   return (
     <div className="mt-6">
+      {item && show && <UpdateModal item={item} handleClose={handleClose} />}
       <Table labels={labels}>
         {classes.map((item) => (
           <tr key={item._id}>
@@ -58,6 +68,7 @@ const MyClasses = () => {
             </td>
             <th>
               <button
+                onClick={() => handleModal(item)}
                 className={`px-6 py-1 mr-2 border-2 border-gray-700 rounded-full bg-primary text-textDark
                 }`}
               >
