@@ -8,10 +8,11 @@ import { FaAngleDown } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 const Topbar = () => {
-  const { user, logOut } = useAuth();
+  const { user, logOut, setLoading } = useAuth();
   const navigate = useNavigate();
   const handleLogout = async () => {
     await logOut();
+    setLoading(false);
     navigate("/login");
   };
   return (

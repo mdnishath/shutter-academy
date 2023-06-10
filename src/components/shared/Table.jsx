@@ -3,60 +3,32 @@ import Image from "./Image";
 
 const Table = ({ labels, children }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table">
+    <div className="w-10/12 h-full mx-auto overflow-x-auto rounded-md shadow-xl dark:bg-gray-800">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         {/* head */}
-        <thead>
+        <thead className="bg-gray-50 dark:bg-gray-800">
           <tr>
-            <th>
+            <th
+              scope="col"
+              className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+            >
               <label>
                 <input type="checkbox" className="checkbox" />
               </label>
             </th>
             {labels.map((item, index) => (
-              <th key={index}>{item}</th>
+              <th
+                scope="col"
+                className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                key={index}
+              >
+                {item}
+              </th>
             ))}
           </tr>
         </thead>
-        <tbody className="">
-          {/* row 1 */}
-          {children.map((item) => (
-            <tr key={item._id}>
-              <td>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </td>
-              <td>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="w-12 h-12 mask mask-squircle">
-                      <Image src={item?.photo} alt={item?.name} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">{item?.name}</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                {item.email}
-                <br />
-              </td>
-              <td>{item.role}</td>
-              <th>
-                <button className="px-3 py-1 mr-2 rounded-md bg-primary text-textDark">
-                  Admin
-                </button>
-                <button className="px-3 py-1 mr-2 bg-blue-500 rounded-md text-textDark">
-                  Instructor
-                </button>
-                <button className="px-3 py-1 bg-orange-500 rounded-md text-textDark">
-                  Student
-                </button>
-              </th>
-            </tr>
-          ))}
+        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+          {children}
         </tbody>
       </table>
     </div>

@@ -3,36 +3,33 @@ import { BsGoogle } from "react-icons/bs";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-hot-toast";
 import GlobalLoader from "./loaders/GlobalLoader";
-import useToken from "../hooks/useTocken";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { API } from "../hooks/useAxios";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const SocialLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [axiosSecure] = useAxiosSecure();
   const from = location.state?.from?.pathname || "/";
   const { googleLogin, setLoading, loading } = useAuth();
   const handleGoogleLogin = async () => {
     try {
-      const { user } = await googleLogin();
       setLoading(true);
-      const apiResult = await API.post("/users", {
-        email: user.email,
-        name: user.displayName,
-        photo: user.photoURL,
+      const { user } = await googleLogin();
+      const apiResult = await API.post(`/users`, {
+        email: user?.email,
+        name: user?.displayName,
+        photo: user?.photoURL,
         role: "student",
       });
-      if (apiResult.status == 200) {
-        await useToken(user);
+      if (apiResult.status === 200 || apiResult.status === 201) {
+        toast.success("Login success");
         setLoading(false);
-        toast.success("Login Success");
         navigate(from, { replace: true });
       }
-    } catch (error) {
-      toast.error(error.message);
-      setLoading(false);
-    }
+    } catch (error) {}
   };
   // if (loading) {
   //   return <GlobalLoader />;

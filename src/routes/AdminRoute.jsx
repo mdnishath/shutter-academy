@@ -2,10 +2,11 @@ import React from "react";
 import useAuth from "../hooks/useAuth";
 import { Navigate, useLocation } from "react-router-dom";
 import GlobalLoader from "../components/loaders/GlobalLoader";
-import useAdmin from "../hooks/useAdmin";
+import useRole from "../hooks/useRole";
+
 const AdminRoute = ({ children }) => {
-  const { user, loading, logOut } = useAuth();
-  const [role, isroleLoading] = useAdmin();
+  const { user, loading, logOut, setLoading } = useAuth();
+  const [role, isroleLoading] = useRole();
   const location = useLocation();
 
   if (loading || isroleLoading) {

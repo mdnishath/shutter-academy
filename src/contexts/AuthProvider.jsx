@@ -8,9 +8,10 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import auth from "../utils/firebase/firebase.config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import auth from "../utils/firebase/firebase.config";
 import { storage } from "../utils/firebase/firebase.config";
+import { API } from "../hooks/useAxios";
 
 export const AuthContext = createContext(null);
 const googleProvider = new GoogleAuthProvider();
@@ -19,65 +20,65 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  //create user
-  const createUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
-  };
+  // Create user
+  const createUser = (email, password) =>
+    createUserWithEmailAndPassword(auth, email, password);
+  // Login
+  const signIn = (email, password) =>
+    signInWithEmailAndPassword(auth, email, password);
 
-  //Login
-  const signIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
+  // Social Login
+  const googleLogin = () => signInWithPopup(auth, googleProvider);
 
-  // =============Social Login ==============
-  const googleLogin = () => {
-    return signInWithPopup(auth, googleProvider);
-  };
-  //update profile
-  const updateUser = (name, image) => {
-    return updateProfile(auth.currentUser, {
-      displayName: name,
-      photoURL: image,
-    });
-  };
-  //logout
-  const logOut = () => {
+  // Update profile
+  const updateUser = (name, image) =>
+    updateProfile(auth.currentUser, { displayName: name, photoURL: image });
+
+  // Logout
+  const logOut = async () => {
     setLoading(true);
     localStorage.removeItem("access-token");
-    return signOut(auth);
+    await signOut(auth);
   };
-  //upload Image
+
+  // Upload Image
   const uploadImage = async (file) => {
-    // Create a storage reference
-    const storageRef = ref(storage, `images/${file.name}`);
-
     try {
-      // Upload the file to Firebase storage
+      const storageRef = ref(storage, `images/${file.name}-${Date.now()}`);
       const snapshot = await uploadBytes(storageRef, file);
-
-      // Get the download URL
       const downloadURL = await getDownloadURL(snapshot.ref);
-      // setUploadedImageUrl(downloadURL);
       return downloadURL;
-      // Do something with the uploaded image and the download URL
     } catch (error) {
       console.error("Error uploading image", error);
     }
   };
-  //Ovjarving auth
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("obgerver user", currentUser);
-      setUser(currentUser);
-      setLoading(false);
-    });
 
+  // Observing auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      console.log("current user", currentUser);
+      // Get and set token
+      if (currentUser) {
+        try {
+          const response = await API.post("/jwt", { email: currentUser.email });
+          localStorage.setItem("access-token", response.data.token);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error getting token", error);
+          setLoading(false);
+        }
+      } else {
+        localStorage.removeItem("access-token");
+        setLoading(false);
+      }
+    });
     return () => {
       unsubscribe();
     };
   }, []);
 
-  //Auth object containing
+  // Auth object
   const authInfo = {
     user,
     loading,
@@ -89,6 +90,7 @@ const AuthProvider = ({ children }) => {
     updateUser,
     logOut,
   };
+
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

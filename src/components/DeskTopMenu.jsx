@@ -9,10 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 const DeskTopMenu = ({ menuOptions, logo }) => {
   const navigate = useNavigate();
-  const { user, logOut } = useAuth();
+  const { user, logOut, setLoading } = useAuth();
 
   const handleLogout = async () => {
     await logOut();
+    setLoading(false);
     navigate("/login");
   };
   return (

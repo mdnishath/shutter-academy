@@ -5,7 +5,7 @@ import Sidbar from "../components/Dashboard/Sidbar";
 
 const DashboardLayout = () => {
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex bg-gray-100 dark:bg-gray-900">
       {/* Sidebar */}
       <Sidbar />
       {/* Main content */}
@@ -14,7 +14,7 @@ const DashboardLayout = () => {
         <Topbar />
 
         {/* Main content area */}
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-4 md:pl-[250px]">
           <Outlet />
         </div>
       </div>

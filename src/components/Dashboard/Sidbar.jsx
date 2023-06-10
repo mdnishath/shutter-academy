@@ -7,11 +7,12 @@ import { FiSettings } from "react-icons/fi";
 import { RxDashboard } from "react-icons/rx";
 import { AiOutlineHome } from "react-icons/ai";
 import Item from "./shared/Item";
-import useAdmin from "../../hooks/useAdmin";
+import useRole from "../../hooks/useRole";
 import GlobalLoader from "../loaders/GlobalLoader";
 
 const Sidebar = () => {
-  const [role, isroleLoading] = useAdmin();
+  const [role, isroleLoading] = useRole();
+  // const role = "admin";
 
   const adminPages = [
     { path: "/dashboard", name: "Dashboard", icon: RxDashboard },
@@ -60,7 +61,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="dark:bg-gray-800 bg-white shadow-xl w-[250px] p-4">
+    <div className="dark:bg-gray-800 fixed top-0 left-0 h-full bg-white  shadow-xl w-[250px] p-4">
       <div className="flex-shrink-0">
         <Image src={logo} alt="Logo" />
       </div>

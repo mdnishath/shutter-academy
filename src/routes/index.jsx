@@ -14,6 +14,7 @@ import Profile from "../pages/Dashboard/Profile";
 import AdminRoute from "./AdminRoute";
 import AddClass from "../pages/Dashboard/instructor/AddClass";
 import InstructorRoute from "./InstructorRoute";
+import MyClasses from "../pages/Dashboard/instructor/MyClasses";
 
 //Creating routs array
 export const router = createBrowserRouter([
@@ -48,10 +49,18 @@ export const router = createBrowserRouter([
       { path: "/dashboard/profile", element: <Profile /> },
       { path: "/dashboard/classes", element: <ManageClassess /> },
       {
+        path: "/dashboard/my-classes",
+        element: (
+          <InstructorRoute>
+            <MyClasses />
+          </InstructorRoute>
+        ),
+      },
+      {
         path: "/dashboard/add-class",
         element: (
           <InstructorRoute>
-            <AddClass></AddClass>
+            <AddClass />
           </InstructorRoute>
         ),
       },
