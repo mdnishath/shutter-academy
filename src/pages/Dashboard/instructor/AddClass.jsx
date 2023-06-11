@@ -9,11 +9,14 @@ import {
 } from "react-icons/ai";
 import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
 import useAuth from "../../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AddClass = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { loading, user, uploadImage } = useAuth();
   const [axiosSecure] = useAxiosSecure();
   const {
@@ -40,6 +43,8 @@ const AddClass = () => {
         if (result.data.insertedId) {
           toast.success("Class added successfully");
           reset();
+          queryClient.invalidateQueries("classes");
+          navigate("/dashboard/my-classes");
         }
       }
     } catch (error) {

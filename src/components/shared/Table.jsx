@@ -5,7 +5,6 @@ const Table = ({ labels, children }) => {
   return (
     <div className="w-10/12 h-full mx-auto overflow-x-auto rounded-md shadow-xl dark:bg-gray-800">
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        {/* head */}
         <thead className="bg-gray-50 dark:bg-gray-800">
           <tr>
             <th
@@ -27,7 +26,7 @@ const Table = ({ labels, children }) => {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+        <tbody className="items-center bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
           {children}
         </tbody>
       </table>

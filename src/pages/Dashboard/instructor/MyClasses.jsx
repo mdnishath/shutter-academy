@@ -9,7 +9,7 @@ import UpdateModal from "../../../components/Dashboard/instructor/UpdateModal";
 const MyClasses = () => {
   const [axiosSecure] = useAxiosSecure();
   const [show, setShow] = useState(false);
-  const [item, setItem] = useState();
+  const [itemProps, setItemProps] = useState();
   const labels = [
     "Title",
     "Enrolled Students",
@@ -28,16 +28,19 @@ const MyClasses = () => {
 
   //handle Modal
   const handleModal = (item) => {
-    setItem(item);
+    setItemProps(item);
     setShow(!show);
   };
   const handleClose = () => setShow(!show);
   if (isLoading) {
     return <GlobalLoader />;
   }
+
   return (
     <div className="mt-6">
-      {item && show && <UpdateModal item={item} handleClose={handleClose} />}
+      {itemProps && show && (
+        <UpdateModal item={itemProps} handleClose={handleClose} />
+      )}
       <Table labels={labels}>
         {classes.map((item) => (
           <tr key={item._id}>

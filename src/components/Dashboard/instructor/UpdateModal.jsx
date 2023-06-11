@@ -9,11 +9,13 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import GlobalLoader from "../../loaders/GlobalLoader";
+import { toast } from "react-hot-toast";
 
 const UpdateModal = ({ item, handleClose }) => {
-  console.log(item._id);
+  const queryClient = useQueryClient();
+  // console.log(item._id);
   const { loading, user, uploadImage } = useAuth();
   const [axiosSecure] = useAxiosSecure();
   const {
@@ -22,47 +24,63 @@ const UpdateModal = ({ item, handleClose }) => {
     reset,
     formState: { errors },
   } = useForm();
-  const {
-    data: apiClass = {},
-    isLoading,
-    refetch,
-  } = useQuery(["users"], async () => {
-    const res = await axiosSecure.get(`/instructor/class/${item._id}`);
-    return res.data;
+
+  // Updateing
+  const mutation = useMutation({
+    mutationFn: async ({ id, updatedClass }) => {
+      const response = await axiosSecure.patch(`/instructor/class/${id}`, {
+        updatedClass,
+      });
+
+      const { matchedCount } = response.data;
+      if (matchedCount > 0) {
+        toast.success("Class updated");
+        // refetch();
+        queryClient.invalidateQueries("classes");
+        handleClose();
+      }
+      return response;
+    },
   });
+  const { isLoading: updateLoading } = mutation;
 
   const onSubmit = async (data) => {
-    // try {
-    //   const file = data.image[0];
-    //   const imageURL = await uploadImage(file);
-    //   if (imageURL) {
-    //     const result = await axiosSecure.post("/instructor", {
-    //       title: data.title,
-    //       instructor: data.instructor,
-    //       price: data.price,
-    //       seats: data.seats,
-    //       email: data.email,
-    //       image: imageURL,
-    //       stutas: "pending",
-    //       enrolled: 0,
-    //     });
-    //     if (result.data.insertedId) {
-    //       toast.success("Class added successfully");
-    //       reset();
-    //     }
-    //   }
-    // } catch (error) {
-    //   toast.error(error.message);
-    // }
+    const file = data.image[0];
+    let updatedClass = {
+      title: data.title,
+      instructor: data.instructor,
+      price: data.price,
+      seats: data.seats,
+      email: data.email,
+    };
+
+    if (file) {
+      const imageURL = await uploadImage(file);
+      if (imageURL) {
+        updatedClass = Object.assign({}, updatedClass, {
+          image: imageURL,
+        });
+      }
+    }
+
+    try {
+      await mutation.mutateAsync({ id: item._id, updatedClass });
+    } catch (error) {
+      console.error("Failed to update role:", error);
+    }
   };
-  if (isLoading || isLoading) {
+  const handleCloseClear = () => {
+    reset();
+    handleClose();
+  };
+  if (updateLoading) {
     return <GlobalLoader />;
   }
   return (
     <div className="absolute top-0 left-0 z-40 flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-60">
       <div className="bg-gray-800 w-[960px] py-10 px-5 rounded-lg relative">
         <button
-          onClick={handleClose}
+          onClick={handleCloseClear}
           htmlFor="my-modal-3"
           className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
         >
@@ -83,7 +101,7 @@ const UpdateModal = ({ item, handleClose }) => {
                     })}
                     placeholder="Class Title "
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-textLight"
-                    defaultValue={apiClass?.title}
+                    defaultValue={item?.title}
                   />
                   <div className="bg-primary absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
                     <BsJournalBookmark className="text-xl text-gray-900" />
@@ -155,7 +173,7 @@ const UpdateModal = ({ item, handleClose }) => {
                     placeholder="Available seats"
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-white"
                     min={1}
-                    defaultValue={apiClass?.seats}
+                    defaultValue={item?.seats}
                   />
 
                   <div className="bg-primary  absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
@@ -178,7 +196,7 @@ const UpdateModal = ({ item, handleClose }) => {
                     placeholder="Price"
                     className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-white"
                     min={1}
-                    defaultValue={apiClass?.price}
+                    defaultValue={item?.price}
                   />
 
                   <div className="bg-primary  absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
@@ -197,7 +215,7 @@ const UpdateModal = ({ item, handleClose }) => {
                     <input
                       id="imageUpload"
                       type="file"
-                      {...register("image", { required: "Image is requred" })}
+                      {...register("image")}
                       className="w-full bg-transparent text-text-dark"
                       accept="image/png, image/jpeg"
                     />
