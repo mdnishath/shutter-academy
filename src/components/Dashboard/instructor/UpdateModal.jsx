@@ -52,6 +52,7 @@ const UpdateModal = ({ item, handleClose }) => {
       price: data.price,
       seats: data.seats,
       email: data.email,
+      instructorImage: user.photoURL,
     };
 
     if (file) {

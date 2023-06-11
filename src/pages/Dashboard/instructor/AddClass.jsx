@@ -39,6 +39,7 @@ const AddClass = () => {
           image: imageURL,
           stutas: "pending",
           enrolled: 0,
+          instructorImage: user.photoURL,
         });
         if (result.data.insertedId) {
           toast.success("Class added successfully");

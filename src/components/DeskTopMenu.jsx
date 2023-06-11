@@ -17,7 +17,7 @@ const DeskTopMenu = ({ menuOptions, logo }) => {
     navigate("/login");
   };
   return (
-    <nav className="py-2 bg-white shadow-lg dark:bg-gray-800">
+    <nav className="py-2 z-[150] bg-white shadow-lg dark:bg-gray-800">
       <Container>
         <div className="flex items-center">
           <div className="flex-shrink-0">
@@ -62,7 +62,7 @@ const DeskTopMenu = ({ menuOptions, logo }) => {
                     </div>
                   )}
 
-                  <div className="relative group">
+                  <div className="relative group z-[151]">
                     <div className="bg-transparent dropdown dropdown-end">
                       <label tabIndex={0} className="m-1 cursor-pointer">
                         <FaAngleDown className="text-xl text-primary" />
