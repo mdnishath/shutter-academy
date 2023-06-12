@@ -6,6 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-hot-toast";
 
 const CheckoutForm = ({ cart, price }) => {
+  console.log("from checkout page", cart);
   //   console.log("cart", cart, cart._id);
   const stripe = useStripe();
   const elements = useElements();
@@ -83,6 +84,7 @@ const CheckoutForm = ({ cart, price }) => {
         seats: Number(cart.seats),
         className: cart.title,
         enrolled: Number(cart.enrolled),
+        enrolledClass: cart.enrolledClass,
       };
       axiosSecure.post("/student/payment/create", payment).then((res) => {
         if (res.data.insertResult.insertedId) {

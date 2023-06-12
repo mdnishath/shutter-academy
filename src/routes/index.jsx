@@ -18,6 +18,8 @@ import MyClasses from "../pages/Dashboard/instructor/MyClasses";
 import StudentRoute from "./StudentRoute";
 import MySelectedClass from "../pages/Dashboard/student/MySelectedClass";
 import Payment from "../pages/Dashboard/student/Payment";
+import MyEnrolledClass from "../pages/Dashboard/student/MyEnrolledClass";
+import Payments from "../pages/Dashboard/student/Payments";
 
 //Creating routs array
 export const router = createBrowserRouter([
@@ -80,6 +82,22 @@ export const router = createBrowserRouter([
         element: (
           <StudentRoute>
             <Payment />
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "/dashboard/my-enrilled-classes",
+        element: (
+          <StudentRoute>
+            <MyEnrolledClass />
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "/dashboard/payment",
+        element: (
+          <StudentRoute>
+            <Payments />
           </StudentRoute>
         ),
       },

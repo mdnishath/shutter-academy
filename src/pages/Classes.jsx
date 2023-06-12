@@ -31,7 +31,6 @@ const Classes = () => {
 
   //handle seletee class
   const handleSeltedClass = async (item) => {
-    console.log(item);
     if (!user) {
       navigate("/login", { state: { from: location } });
     } else {
@@ -46,6 +45,7 @@ const Classes = () => {
           email: user.email,
           seats: Number(item.seats),
           enrolled: Number(item.enrolled),
+          enrolledClass: item,
         });
         if (result.data.insertedId) {
           toast.success("Class Added To Cart");
