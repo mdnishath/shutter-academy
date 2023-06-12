@@ -12,7 +12,8 @@ const useRole = () => {
       const res = await axiosSecure.get(`/users/role/${user?.email}`);
       setLoading(false);
       return res.data.role;
-    }
+    },
+    { enabled: !!user?.email } // Ensure query is only enabled when user email is present
   );
 
   return [role, isRoleLoading];

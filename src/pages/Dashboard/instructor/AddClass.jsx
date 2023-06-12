@@ -33,8 +33,8 @@ const AddClass = () => {
         const result = await axiosSecure.post("/instructor", {
           title: data.title,
           instructor: data.instructor,
-          price: data.price,
-          seats: data.seats,
+          price: Number(data.price),
+          seats: Number(data.seats),
           email: data.email,
           image: imageURL,
           stutas: "pending",

@@ -5,6 +5,7 @@ import GlobalLoader from "../../../components/loaders/GlobalLoader";
 import useAuth from "../../../hooks/useAuth";
 import { BsCurrencyDollar } from "react-icons/bs";
 import Image from "../../../components/shared/Image";
+import { Link } from "react-router-dom";
 
 const MySelectedClass = () => {
   const { loading } = useAuth();
@@ -53,17 +54,16 @@ const MySelectedClass = () => {
 
             <td className="flex items-center gap-2 h-[100px]">
               <button
-                onClick={() => handleDelete(item)}
                 className={` border  rounded-full btn-xs text-textDark dark:text-textLight bg-transparent`}
               >
-                Approved
+                Delete
               </button>
-              <button
+              <Link
                 className={` border  rounded-full btn-xs text-textDark px-4 border-primary bg-primary`}
-                onClick={() => handlePay(item)}
+                to={`/dashboard/payment/${item._id}`}
               >
                 Pay
-              </button>
+              </Link>
             </td>
           </tr>
         ))}

@@ -2,10 +2,8 @@ import React from "react";
 import Container from "../components/shared/Container";
 import Title from "../components/shared/Title";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { API } from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
 import GlobalLoader from "../components/loaders/GlobalLoader";
-import { BiUserPin } from "react-icons/bi";
 import { AiOutlineBook, AiOutlineUser } from "react-icons/ai";
 import { MdAirlineSeatLegroomNormal } from "react-icons/md";
 import Image from "../components/shared/Image";
@@ -15,6 +13,7 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import useRole from "../hooks/useRole";
+import { API } from "../hooks/useAxios";
 
 const Classes = () => {
   const [axiosSecure] = useAxiosSecure();
@@ -24,12 +23,15 @@ const Classes = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: classes = [], isLoading } = useQuery(["classes"], async () => {
-    const res = await API.get("/classes/all");
+    const res = await axiosSecure.get("/classes/all");
+    console.log(res);
     return res.data;
   });
+  console.log(classes);
 
   //handle seletee class
   const handleSeltedClass = async (item) => {
+    console.log(item);
     if (!user) {
       navigate("/login", { state: { from: location } });
     } else {
@@ -40,8 +42,10 @@ const Classes = () => {
           classId: item._id,
           title: item.title,
           image: item.image,
-          price: item.price,
+          price: Number(item.price),
           email: user.email,
+          seats: Number(item.seats),
+          enrolled: Number(item.enrolled),
         });
         if (result.data.insertedId) {
           toast.success("Class Added To Cart");
@@ -53,7 +57,7 @@ const Classes = () => {
       }
     }
   };
-  if (isLoading || loading || isRoleLoading) {
+  if (isLoading || loading) {
     return <GlobalLoader />;
   }
   return (
@@ -88,7 +92,7 @@ const Classes = () => {
                     <div className="flex gap-5">
                       <div className="flex gap-2">
                         <MdAirlineSeatLegroomNormal className="items-center text-2xl text-primary" />
-                        <p>{item?.enrolled}</p>
+                        <p>{item?.seats}</p>
                       </div>
                       <div className="flex gap-2">
                         <BsCurrencyDollar className="items-center text-2xl text-primary" />
@@ -98,6 +102,7 @@ const Classes = () => {
                         <button
                           onClick={() => handleSeltedClass(item)}
                           className="px-2 text-sm font-semibold rounded-lg bg-primary text-textDark"
+                          disabled={item?.seats == 0}
                         >
                           Add Now
                         </button>
