@@ -143,7 +143,7 @@ const Login = () => {
                       Login
                     </button>
                   )}
-                  <p className="mt-5 text-center text-white">
+                  <p className="mt-5 text-center dark:text-white text-textDark">
                     Don't have an account?
                     <Link to={"/signup"} className="ml-1">
                       Sign Up here

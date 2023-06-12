@@ -17,7 +17,7 @@ import { useQueryClient } from "@tanstack/react-query";
 const AddClass = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { loading, user, uploadImage } = useAuth();
+  const { loading, user, setLoading, uploadImage } = useAuth();
   const [axiosSecure] = useAxiosSecure();
   const {
     register,
@@ -27,6 +27,7 @@ const AddClass = () => {
   } = useForm();
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const file = data.image[0];
       const imageURL = await uploadImage(file);
       if (imageURL) {
@@ -45,6 +46,7 @@ const AddClass = () => {
           toast.success("Class added successfully");
           reset();
           queryClient.invalidateQueries("classes");
+          setLoading(false);
           navigate("/dashboard/my-classes");
         }
       }

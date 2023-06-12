@@ -224,7 +224,7 @@ const Signup = () => {
                       Sign Up
                     </button>
                   )}
-                  <p className="mt-5 text-center text-white">
+                  <p className="mt-5 text-center dark:text-white text-textDark">
                     Already have an account?
                     <Link to={"/login"} className="ml-1">
                       Login Here

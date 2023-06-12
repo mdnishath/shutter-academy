@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000/api/",
+  baseURL: "https://photography-school-client-server.vercel.app/api/",
 });
 
 const useAxiosSecure = () => {

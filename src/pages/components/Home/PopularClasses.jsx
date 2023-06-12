@@ -20,6 +20,7 @@ const PopularClasses = () => {
   if (isLoading) {
     return <GlobalLoader />;
   }
+  console.log(classes);
 
   return (
     <div className="grid gap-5 md:grid-cols-3">
