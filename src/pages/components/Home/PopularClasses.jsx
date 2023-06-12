@@ -22,7 +22,7 @@ const PopularClasses = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-5">
+    <div className="grid gap-5 md:grid-cols-3">
       <AnimatePresence>
         {classes.map((item) => (
           <motion.div

@@ -76,7 +76,7 @@ const Login = () => {
                       },
                     })}
                     placeholder="Email "
-                    className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none !text-textDark dark:text-textLight"
+                    className="w-full bg-transparent border border-borderLight py-2 px-[60px] rounded-md outline-none text-textDark dark:text-textLight"
                   />
                   <div className="bg-primary absolute left-0 top-1/2 transform  -translate-y-1/2 h-full flex items-center justify-center w-[40px]">
                     <MdOutlineEmail className="text-xl text-gray-900" />

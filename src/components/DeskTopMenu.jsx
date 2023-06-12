@@ -8,24 +8,26 @@ import { BiUser } from "react-icons/bi";
 import { FaAngleDown } from "react-icons/fa";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
+import GlobalLoader from "./loaders/GlobalLoader";
 
 const DeskTopMenu = ({ menuOptions, logo }) => {
   const navigate = useNavigate();
   const { user, logOut, setLoading } = useAuth();
-  const [cart] = useCart();
+  const [cart, cartLoading] = useCart();
   console.log(cart);
   const handleLogout = async () => {
     await logOut();
     setLoading(false);
     navigate("/login");
   };
+
   return (
-    <nav className="py-2 z-[150] bg-white shadow-lg dark:bg-gray-800">
+    <nav className="py-2 hidden z-[150] md:block bg-white shadow-lg dark:bg-gray-800">
       <Container>
         <div className="flex items-center">
-          <div className="flex-shrink-0">
+          <Link to={"/"} className="flex-shrink-0">
             <Image src={logo} alt="Logo" />
-          </div>
+          </Link>
           <ul className="flex justify-center flex-grow gap-6">
             {menuOptions.map((item, index) => (
               <li key={index} className="font-semibold">
@@ -38,7 +40,7 @@ const DeskTopMenu = ({ menuOptions, logo }) => {
               <Link to={"/dashboard/my-selted-classes"} className="relative">
                 <AiOutlineShoppingCart className="text-xl" />
                 <span className="absolute -top-3 -right-3 text-primary">
-                  {cart.length}
+                  {cart?.length}
                 </span>
               </Link>
               <div>

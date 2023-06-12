@@ -21,7 +21,7 @@ const PopularInstructors = () => {
   }
   console.log(classes);
   return (
-    <div className="grid grid-cols-3 gap-5">
+    <div className="grid gap-5 md:grid-cols-3">
       {classes.map((item) => (
         <div
           key={item?._id}

@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
           <div className="col-span-12 md:col-span-6">
             <Image src={logo} alt="Logo" />
-            <p className="mt-3 w-[400px]">
+            <p className="mt-3 md:w-[400px]">
               Unleash your creative potential and master the art of photography
               with Shutter Academy.
             </p>

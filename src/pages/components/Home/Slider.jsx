@@ -14,10 +14,10 @@ import { Link } from "react-router-dom";
 const Slider = () => {
   return (
     <div className="relative">
-      <div className="custom-next">
+      <div className="hidden custom-next md:flex">
         <ArrowNext />
       </div>
-      <div className="custom-prev">
+      <div className="hidden custom-prev md:flex">
         <ArrowPrev />
       </div>
       <Swiper
@@ -40,10 +40,10 @@ const Slider = () => {
         <SwiperSlide>
           <div className="relative">
             <div className="absolute !z-[100] top-0 left-0 h-full w-full flex justify-center items-center flex-col">
-              <h1 className="text-4xl font-bold text-textLight">
+              <h1 className="text-lg font-bold md:text-4xl text-textLight">
                 Capture Life's Moments with Shutter Academy
               </h1>
-              <p className="w-[600px] mt-4 text-center text-textLight">
+              <p className="md:w-[600px] p-2 mt-4 text-center text-textLight">
                 Unleash your photography skills. Join Shutter Academy and master
                 the art of capturing unforgettable moments. Enroll now and bring
                 your passion to life!
@@ -68,10 +68,10 @@ const Slider = () => {
         <SwiperSlide>
           <div className="relative">
             <div className="absolute !z-[100] top-0 left-0 h-full w-full flex justify-center items-center flex-col">
-              <h1 className="text-4xl font-bold text-textLight">
+              <h1 className="text-lg font-bold md:text-4xl text-textLight">
                 Unleash Your Creativity at Shutter Academy
               </h1>
-              <p className="w-[600px] mt-4 text-center text-textLight">
+              <p className="md:w-[600px] p-2 mt-4 text-center text-textLight">
                 Discover the world through the lens. Shutter Academy offers
                 expert photography training to help you express your unique
                 perspective. Enroll today and embark on a journey of visual

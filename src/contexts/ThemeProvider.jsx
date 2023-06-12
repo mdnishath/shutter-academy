@@ -9,6 +9,7 @@ export const ThemeProvider = ({ children }) => {
       ? JSON.parse(darkModeValue)
       : window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -31,7 +32,7 @@ export const ThemeProvider = ({ children }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>
+    <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, open, setOpen }}>
       {children}
     </ThemeContext.Provider>
   );
