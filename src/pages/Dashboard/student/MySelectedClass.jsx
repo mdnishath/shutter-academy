@@ -6,19 +6,26 @@ import useAuth from "../../../hooks/useAuth";
 import { BsCurrencyDollar } from "react-icons/bs";
 import Image from "../../../components/shared/Image";
 import { Link } from "react-router-dom";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 
 const MySelectedClass = () => {
   const { loading } = useAuth();
+  const queryClient = useQueryClient();
   const [cart, cartLoading] = useCart();
+  const [axiosSecure] = useAxiosSecure();
   console.log(cart);
   const labels = ["Name", "Price", "Actions"];
 
-  const handleDelete = (item) => {
-    console.log(item);
+  const handleDelete = async (id) => {
+    const res = await axiosSecure.delete(`/cart/${id}`);
+    if (res.data.deletedCount) {
+      toast.success("Deleted successfull");
+      queryClient.invalidateQueries("cart");
+    }
   };
-  const handlePay = (item) => {
-    console.log(item);
-  };
+
   if (loading || cartLoading) {
     return <GlobalLoader />;
   }
@@ -54,6 +61,7 @@ const MySelectedClass = () => {
 
             <td className="flex items-center gap-2 h-[100px]">
               <button
+                onClick={() => handleDelete(item._id)}
                 className={` border  rounded-full btn-xs text-textDark dark:text-textLight bg-transparent`}
               >
                 Delete
