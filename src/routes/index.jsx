@@ -15,6 +15,8 @@ import AdminRoute from "./AdminRoute";
 import AddClass from "../pages/Dashboard/instructor/AddClass";
 import InstructorRoute from "./InstructorRoute";
 import MyClasses from "../pages/Dashboard/instructor/MyClasses";
+import StudentRoute from "./StudentRoute";
+import MySelectedClass from "../pages/Dashboard/student/MySelectedClass";
 
 //Creating routs array
 export const router = createBrowserRouter([
@@ -62,6 +64,14 @@ export const router = createBrowserRouter([
           <InstructorRoute>
             <AddClass />
           </InstructorRoute>
+        ),
+      },
+      {
+        path: "/dashboard/my-selted-classes",
+        element: (
+          <StudentRoute>
+            <MySelectedClass />
+          </StudentRoute>
         ),
       },
     ],

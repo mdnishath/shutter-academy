@@ -26,7 +26,7 @@ const Table = ({ labels, children }) => {
             ))}
           </tr>
         </thead>
-        <tbody className="items-center bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+        <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
           {children}
         </tbody>
       </table>

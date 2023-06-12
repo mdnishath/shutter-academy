@@ -1,16 +1,19 @@
 import useAuth from "../hooks/useAuth";
+import useCart from "../hooks/useCart";
 import ActiveLink from "./ActiveLink";
 import ThemeSwitcher from "./ThemeSwitcher";
 import Container from "./shared/Container";
 import Image from "./shared/Image";
 import { BiUser } from "react-icons/bi";
 import { FaAngleDown } from "react-icons/fa";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
 const DeskTopMenu = ({ menuOptions, logo }) => {
   const navigate = useNavigate();
   const { user, logOut, setLoading } = useAuth();
-
+  const [cart] = useCart();
+  console.log(cart);
   const handleLogout = async () => {
     await logOut();
     setLoading(false);
@@ -32,6 +35,12 @@ const DeskTopMenu = ({ menuOptions, logo }) => {
           </ul>
           <div className="flex-shrink-0">
             <div className="flex items-center gap-6">
+              <Link to={"/dashboard/my-selted-classes"} className="relative">
+                <AiOutlineShoppingCart className="text-xl" />
+                <span className="absolute -top-3 -right-3 text-primary">
+                  {cart.length}
+                </span>
+              </Link>
               <div>
                 <ThemeSwitcher />
               </div>
