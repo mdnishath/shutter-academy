@@ -20,6 +20,7 @@ import MySelectedClass from "../pages/Dashboard/student/MySelectedClass";
 import Payment from "../pages/Dashboard/student/Payment";
 import MyEnrolledClass from "../pages/Dashboard/student/MyEnrolledClass";
 import Payments from "../pages/Dashboard/student/Payments";
+import NotFound from "../components/NotFound";
 
 //Creating routs array
 export const router = createBrowserRouter([
@@ -102,5 +103,9 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/*",
+    element: <NotFound />,
   },
 ]);
