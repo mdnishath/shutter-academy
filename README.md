@@ -23,4 +23,4 @@ A Photography school that provide classes to learn or to be a good photographer.
 
 ## Live Link
 
-[Live Website](https://pages.github.com/)
+[Live Website](https://sutter-academy.web.app/)
